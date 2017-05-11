@@ -1,0 +1,399 @@
+\documentclass{beamer}
+\usepackage{color, german, graphicx}
+\usepackage{eurosym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{anyfontsize}
+\usepackage{longtable}
+\usepackage{mathptmx}
+\usepackage{mathtools}
+\usepackage{float}
+\usecolortheme{beaver}
+\graphicspath{ {figures/} }
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+	\frametitle{Outline}
+	\tableofcontents[currentsection,currentsubsection, subsectionstyle=hide/hide/hide]
+  \end{frame}
+}
+
+\begin{document}
+  \title
+  {Text Classification}
+  \subtitle{Special Topic Seminar}
+  \author 
+  {
+	\fontsize{9}{25}\selectfont Presented by:\\
+	\fontsize{14}{30}\selectfont \textbf{Mohammed Arshad Ansari}\\
+	\fontsize{9}{25}\selectfont Project Guide:\\
+	\fontsize{14}{30}\selectfont \textbf{Sharvari Govialkar}
+  }
+  \institute
+  {
+	\includegraphics[width=1cm]{piit.png}\\
+	DEPARTMENT OF INFORMATION TECHNOLOGY\\
+	PILLAI INSTITUTE OF INFORMATION TECHNOLOGY\\
+	ENGINEERING, MEDIA STUDIES AND RESEARCH\\
+	NEW PANVEL - 410 206\\
+	UNIVERSITY OF MUMBAI\\
+	Academic Year 2014-15\\
+  }
+  \date {}
+
+  \maketitle
+
+
+
+  \section{Introduction}
+	\subsection{Motivation}
+	\frame{\frametitle{Motivation}
+	  Following are the enumeration of causes that motivated this work.
+	  \begin{enumerate}
+		\item Commercial need for fast and easy to implement classification mechanism 
+		\item Unstructured data categorization
+		\item Reduction of manual time investment
+		\item Cost effectiveness
+	  \end{enumerate}
+	  All the above mentioned needs and causes for motivation comes from the immediate requirement in the companies that heavily depend on the reselling.
+	}
+	\frame{\frametitle{Automatic document classification}
+	  \begin{enumerate}
+		\item \textbf{\textit{Supervised document classification}}; where some external mechanism (such as human feedback) provides information on the correct classification for documents, \\
+		\item \textbf{\textit{Unsupervised document classification}}; (also known as document clustering), where the classification must be done entirely without reference to external information, and \\
+		\item \textbf{\textit{Semi-supervised document classification}}: where parts of the documents are labeled by the external mechanism.
+	  \end{enumerate}
+	}
+
+	\subsection{Overview}
+	\subsubsection{Techniques for classification}
+	\frame{\frametitle{Existing techniques for classification}
+	  \begin{enumerate}
+		\item \textbf{\textit {Expectation maximization (EM)}}
+		\item \textbf{\textit {Naive Bayes classifier}}
+		\item \textbf{\textit {tf–idf}}
+		\item \textbf{\textit {Latent semantic indexing}}
+		\item \textbf{\textit {Support vector machines (SVM)}}
+		\item \textbf{\textit {Artificial neural network}}
+		\item \textbf{\textit {K-nearest neighbour algorithms}}
+		\item \textbf{\textit {Decision trees such as ID3 or C4.5}}
+		\item \textbf{\textit {Concept Mining}}
+		\item \textbf{\textit {Multiple-instance learning}}
+		\item \textbf{\textit {Natural language processing approaches}}
+	  \end{enumerate}
+
+	
+	}
+	  
+	\subsubsection{Problem domain}
+	\frame{\frametitle{Problems under consideration}
+	  \begin{enumerate}
+		\item Find similarity between products (at individual level) to group them together as same products and allow price differenciation.
+		\item Find similarity between products at a macroscopic level to group them together as belonging to same category of products automatically.
+		\item Find cross related products, to group them based on their function. E.g. Grouping similar pants and shirts together.
+	  \end{enumerate}
+	}
+
+
+  \section{Literature Survey}
+	\frame{\frametitle{Literature Survey} 
+	  \begin{longtable}[c]{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+		\hline
+		Paper & Author & Approach & Result\\
+		\hline
+		\endhead
+	  
+		\fontsize{7}{9}\selectfont A Machine Learning Approach for Automatic Text Categorization & \fontsize{7}{9}\selectfont Kurt Maly, Steven Zeil,  Mohammed Zubair, Naveen Ratkal& \fontsize{7}{9}\selectfont SVM is used to classify the Defence Technical Information Center documents in to their appropriate category & \fontsize{7}{9}\selectfont SVM out perform other techniques such as bayes and KNN classifiers as shown in this work\\ 
+		\hline
+	  \end{longtable}
+	}
+	\frame{\frametitle{Literature Survey} 
+	  \begin{longtable}[c]{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+		\hline
+		Paper & Author & Approach & Result\\
+		\hline
+		\endhead
+	  
+	\fontsize{7}{9}\selectfont	Automatic Text Classification: A Technical Review & \fontsize{7}{9}\selectfont Mita K. Dalal, Mukesh A. Zaveri & \fontsize{7}{9}\selectfont Multiple techniques are used for classification and evaluated in this work.& \fontsize{7}{9}\selectfont Stress must be given on feature selection, size and quality of training data to influence accuracy and correctness.\\ 
+		\hline
+	  \end{longtable}
+	}
+	\frame{\frametitle{Literature Survey} 
+	  \begin{longtable}[c]{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+		\hline
+		Paper & Author & Approach & Result\\
+		\hline
+		\endhead
+	  
+		\fontsize{7}{9}\selectfont Online News Text Classification Using Neural Network and SVM & \fontsize{7}{9}\selectfont Raghvan Gachli & \fontsize{7}{9}\selectfont Techniques such as Backpropagation Algorithm and SVM are used for text classification in this work. & \fontsize{7}{9}\selectfont Credence is given to the mixed (hybrid) approach for classification.\\ 
+		\hline
+	  \end{longtable}
+	}
+	\frame{\frametitle{Literature Survey} 
+	  \begin{longtable}[c]{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+		\hline
+		Paper & Author & Approach & Result\\
+		\hline
+		\endhead
+	  
+		\fontsize{7}{9}\selectfont Appyling Machine Learning to Product Categorization &  \fontsize{7}{9}\selectfont Sushant Shankar and Irving Lin & \fontsize{7}{9}\selectfont  Multiple techniques evaluated such as Naive Bayes, SVM and KNN. & \fontsize{7}{9}\selectfont  Different data set yeild different results. Classification based on category set with ranking is given more suitablity in case of heirachy of categories\\ 
+		\hline
+	  \end{longtable}
+	}
+	\frame{\frametitle{Literature Survey} 
+	  \begin{longtable}[c]{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+		\hline
+		Paper & Author & Approach & Result\\
+		\hline
+		\endhead
+	  
+		\fontsize{7}{9}\selectfont  Building semantic kernels for Text Classification using Wikipedia  & \fontsize{7}{9}\selectfont  Pu Wang and Carlotta Domeniconi  & \fontsize{7}{9}\selectfont  Bag of Words approach is improved by applying the knowledge from wikipedia to the sematic kernals that will be used by the BOW technique for a more informed classification. & \fontsize{7}{9}\selectfont  The overall bag of words based performance is enhanced due to more promity between synomyms, which are derived from the semantic kernals.\\ 
+		\hline
+	  \end{longtable}
+	}
+	\frame{\frametitle{Literature Survey} 
+	  \begin{longtable}[c]{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|  }
+		\hline
+		Paper & Author & Approach & Result\\
+		\hline
+		\endhead
+	  
+	\fontsize{7}{9}\selectfont	GoldenBullet: Automated Classification of Product Data in E-commerce & \fontsize{7}{9}\selectfont  Y. Ding, M. Korotkiy, B. Omelayenko, V. Kartseva, V. Zykov, M. Klien, E. Schulten and D. Fensel & \fontsize{7}{9}\selectfont  A system called GoldenBullet is explained and evaluation for the purpose of text classification. &  \fontsize{7}{9}\selectfont It uses a hybrid approach of combining data mining and machine learning techniques. The yeild is somewhere between 70\% to 98\%\\
+		\hline
+	  \end{longtable}
+ 
+	}
+	\subsection{Literature Review}
+	  \frame{\frametitle{Review Literature}
+		\begin{enumerate}
+		  \item Practicality of purpose
+		  \item Classification versus clustering
+		  \item Reusability versus Parallelization
+		  \item Domain Knowledge
+		\end{enumerate}
+	  }
+
+  \section{Broader Perspective}
+	\frame{\frametitle{Other topics associated with text classification}
+	  \begin{enumerate}
+		\item Text Mining 
+		\item Information retrival 
+		\item NLP
+	  \end{enumerate}
+	}
+
+  \section{Classification Techniques}
+	\subsection{Problem definition}
+	\frame{\frametitle{Definition of problem statement}
+	  The general text categorization task can be formally defined as the task of approx- imating an unknown category assignment function F : D x C -> {0, 1}, where D is the set of all possible documents and C is the set of predefined categories. The value of F(d, c) is 1 if the document d belongs to the category c and 0 otherwise. The approximating function M : D x C -> {0, 1} is called a classifier, and the task is to build a classifier that produces results as “close” as possible to the true category assignment function F.
+	}
+	\subsection{Document Representation}
+	  \frame{\frametitle{Document Representation}
+		The common classifiers and learning algorithms cannot directly process the text doc- uments in their original form. Therefore, during a preprocessing step, the documents are converted into a more manageable representation. Typically, the documents are represented by feature vectors. A feature is simply an entity without internal struc- ture – a dimension in the feature space. A document is represented as a vector in this space – a sequence of features and their weights.
+		\begin{enumerate}
+		  \item Feature Selection
+		  \item Dimensionality reduction
+		\end{enumerate}
+	  }
+	  \subsubsection{Feature Selection}
+	  \frame{\frametitle{Feature Selection}
+		\begin{enumerate}
+		  \item Information Gain\\
+		  	Entropy based information content quality mapping for finding interdependence of data.\\
+		  	$$IG(w) = \sum_{c \in C \bigcup \bar{C}} \sum_{f \in \{w, \bar{w}\}} P(f, c) \frac{P(c | f)}{P(c)}$$
+		  \item CHI Square Method\\
+		  	measures the maximal strength of dependence between the feature and the categories.\\
+		  	$$ x^2_{max}= max_{c \in C} \frac{\|Tr\| . (P(f, c) . P(\bar{f}, \bar{c}) - P(f, \bar{c}) . P(\bar{f}, c))^2}{P(f) . P(\bar{f}) . P(c) . P(\bar{c})} $$
+		\end{enumerate}
+	  }
+	  \subsubsection{Dimenionality Reduction by Feature Extraction}
+	  \frame{\frametitle{Dimenionality Reduction by Feature Extraction}
+		Dimenionality reduction relates to reducing the very large size of dimensions due to innumerable amount of possible words in a document.\\
+		Following are the methods with which we achieve the dimenionality reduction:\\
+		\begin{enumerate}
+		  \item Synomym bag of words to reduce number of unique words/dimensions.
+		  \item Term clustering for synonym grouping
+		  \item Latent Symantic Indexing
+		\end{enumerate}
+	  }
+	  \subsection{Machine learning}
+		\frame{\frametitle{Machine Learning based approaches for text classification}
+		  \begin{enumerate}
+			\item Categorization\\
+			  \begin{enumerate}
+				\item Naive Bayes Classifier
+				\item Support vector machines
+			  \end{enumerate}
+			\item Clustering\\
+			  \begin{enumerate}
+				\item K Nearest Neighbor
+				\item Expectation Maximization Algorithm
+			  \end{enumerate}
+		  \end{enumerate}
+		}
+		\subsection{Categorization}
+		  \subsubsection{Naive Bayes Classifier}
+		  \frame{\frametitle{Naive Bayes Classifier}
+			\begin{columns}[T]
+			  \begin{column}{.5\textwidth}
+				\begin{block}
+				  A naive Bayes classifier assumes that the value of a particular feature is unrelated to the presence or absence of any other feature, given the class variable. For example, a fruit may be considered to be an apple if it is red, round, and about 3" in diameter. A naive Bayes classifier considers each of these features to contribute independently to the probability that this fruit is an apple, regardless of the presence or absence of the other features.
+				\end{block}
+			  \end{column}
+			  \begin{column}{.5\textwidth}
+				\begin{block}{Naive Bayes Convegence}
+				  \includegraphics[width=\textwidth]{Linear-svm-scatterplot.png}
+				\end{block}
+			  \end{column}
+			\end{columns}
+		  }
+
+		  \frame{\frametitle{Naive Bayes Classifier \(contd.\)}
+			Simplicity of naive bayes classifier lies in the fact that its based on conditional property of bayes with the markov like process.
+			$$ p(C|F_1\cdots F_2) $$
+			
+			$$ p(C \vert F_1,\dots,F_n) = \frac{1}{Z}  p(C) \prod_{i=1}^n p(F_i \vert C)$$
+where the evidence $Z = p(F_1, \dots, F_n)$ is a scaling factor dependent only on $F_1,\dots,F_n$, that is, a constant if the values of the feature variables are known.
+
+		  }
+
+		\subsubsection{Support Vector Machine}
+		\frame{\frametitle{Support Vector Machine}
+		  \begin{columns}[T]
+			  \begin{column}{.5\textwidth}
+				\begin{block}
+				  A support vector machine constructs a hyperplane or set of hyperplanes in a high- or infinite-dimensional space, which can  be used for classification, regression, or other tasks. Intuitively, a good separation is achieved  by the hyperplane that has the largest distance to the nearest training data point of any class (so-called functional margin), since in general the larger the margin the lower the generalization error of the classifier.
+				\end{block}
+			  \end{column}
+			  \begin{column}{.5\textwidth}
+				\begin{block}{SVM Hyperplane}
+				  \includegraphics[width=\textwidth]{Svm2.png}
+				\end{block}
+			  \end{column}
+		  \end{columns}
+		}
+		
+		\subsection{Clustering}
+		  \subsubsection{KNN}		
+		  \frame{\frametitle{K Nearest Neighbor}		
+			\begin{columns}[T]
+			  \begin{column}{.5\textwidth}
+				\begin{block}
+				  A KNN is a type of instance-based learning, or lazy learning, where the function is only approximated locally and all computation is deferred until classification. The k-NN algorithm is among the simplest of all machine learning algorithms.
+				\end{block}
+			  \end{column}
+			  \begin{column}{.5\textwidth}
+				\begin{block}{KNN 5}
+				  \includegraphics[width=\textwidth]{Map5NN.png}
+				\end{block}
+			  \end{column}
+			\end{columns}
+
+		  }
+		  \frame{\frametitle{KNN \(Contd.\)}
+			In k-NN regression, the k-NN algorithm is used for estimating continuous variables. One such algorithm uses a weighted average of the k nearest neighbors, weighted by the inverse of their distance. This algorithm works as follows:
+			\begin{itemize}
+			  \item Compute the Euclidean or Mahalanobis distance from the query example to the labeled examples.
+			  \item Order the labeled examples by increasing distance.
+			  \item Find a heuristically optimal number k of nearest neighbors, based on RMSE. This is done using cross validation.
+			  \item Calculate an inverse distance weighted average with the k-nearest multivariate neighbors.
+			\end{itemize}
+		  }
+
+		  \subsubsection{EM Algorithm}
+		  \frame{\frametitle{EM Algorithm}
+			The EM algorithm is used to find the maximum likelihood parameters of a statistical model in cases where the equations cannot be solved directly. 
+
+			Typically these models involve latent variables in addition to unknown parameters and known data observations. That is, either there are missing values among the data, or the model can be formulated more simply by assuming the existence of additional unobserved data points. 
+			
+			For example, a mixture model can be described more simply by assuming that each observed data point has a corresponding unobserved data point, or latent variable,  specifying the mixture component that each data point belongs to.
+		  }
+
+		  \subsection{Hybrid}
+		  \frame{\frametitle{Hybrid approach}
+			All the models can be used in combination with one another to achieve a common goal, while giving each a subtask. \\
+
+			Classfication and Clustering to the rescue.
+			\begin{itemize}
+			  \item Need to use clustering when labels are not already known or present. But this can also be used to find synonyms amoungst the label.
+			  \item The label synomym thus obtained can be combined and the learning of Naive Bayes will be sufficient to identify new incoming documents.
+			\end{itemize}
+		  }
+
+\section{Application}
+  \subsection{General Applications}
+  \frame{\frametitle{General Applications}
+	\begin{itemize}
+	  \item \textbf{Spam Filtering} a process which tries to discern E-mail spam messages from legitimate emails
+	  \item \textbf{Email Routing} sending an email sent to a general address to a specific address or mailbox depending on topic
+	  \item \textbf{Language Identification} automatically determining the language of a text
+	  \item \textbf{Genre classification} automatically determining the genre of a text (also the objective of this work)
+	\end{itemize}
+  }
+  \frame{\frametitle{General Applications \([Contd.]\)}
+	\begin{itemize}
+	  \item \textbf{Readability assessment} automatically determining the degree of readability of a text, either to find suitable materials for different age groups or reader types or as part of a larger text simplification system 
+	  \item \textbf{Sentiment analysis} determining the attitude of a speaker or a writer with respect to some topic or the overall contextual polarity of a document.
+	  \item \textbf{Article triage} selecting articles that are relevant for manual literature curation, for example as is being done as the first step to generate manually curated annotation databases in biology.
+	\end{itemize}
+  }
+  
+  \subsection{Ecommerce Application}
+  \frame{\frametitle{Ecommerce Application}
+	\begin{enumerate}
+	  \item \textbf{Product duplication across retailers}; There is a very obvious need to identify products being entered to see if they are duplicates. Especially for price comparison across retailers.
+	  \item \textbf{Taxonomoy categorization}; Many products that belong to same category are put in the category they belong to, even if a similar to synonymous category exists. This causes multiple groups to be created by different word usage.
+	  \item \textbf{Search enhancements}: Every time a product shows the signs of similarity in one way or another, it becomes easier to return search results based on this similarity, which in turn improves the overall experience.
+	\end{enumerate}
+  }
+
+\section{Conclusion}
+\frame{\frametitle{Conclusion}
+  Following were the observations that were made in the evaluation of all the literature that was considered for this work:\\
+  \begin{itemize}
+	\item \textbf{Size of data matters}: Small data set \(High Bias/Low Variance\) is most suitable for Naive bayes classifer since there is no overfitting. Large data set \(Low Bias/High Variance\) is most suitable for KNN or logistic regression.\\
+	\item \textbf{Better feature dimensionality algorithm}: it is imperiative to use a feature dimensionality algorithm that reduces the number of words as much as possible. This gives best results for perforamce requirements and complexity reduction.
+  \end{itemize}
+}
+\frame{\frametitle{Conclusion \([Cont.]\)}
+  \begin{itemize}
+	\item \textbf{Hybrid Approach}: There are many aspects of each techniques that fit different problems in combinations. For example, clustering will help label the unknown faster, where as categorization will label individual documents faster. 
+	\item \textbf{Performance}: Performance requirements varies as per the problem domain. In some cases, traning the data set and then run against all the test data is done and in some cases, individual data is considered for classification at a time. This puts pressure on the type of algo chosen.
+  \end{itemize}
+}
+
+\section{References}
+\frame{\frametitle{References}
+  \begin{itemize}
+	\item Text Classification, Wikipedia,
+	\item Automatic Text Classification, Internation Journal of Computer Applications (0975 - 8888)
+	\item  Online News Text Classification Using Neural Network and SVM, Raghvan Gachli, International Journal of Latest Scientific Research and Technology 1(2), July - 2014, pp. 122-128, ISSN: 2348-9464
+	\item Applying Machine Learning to Product Categorization, Sushant Shankar and Irving Lin, Department of Computer Science, Standford University.
+	\item Building Semantic Kernels for Text Classification using Wikipedia, Pu Wang and Carlotta Domeniconi, Department of Computer Science, George Mason University.
+  \end{itemize}
+}
+\frame{\frametitle{References \([Contd.]\)}
+  \begin{itemize}
+	\item GoldenBullet: Automated Classification of Product Data in E-Commerce, Y. Ding, M. Korotkiy, B. Omelayenko, V. Kartseva, V. Zykov, M. Klien, E. Schulten and D. Fensel., Vrije Universiteit Amsterdam, De Boelelaan 1081a, 1081 HV Amsterdam, NL.
+	\item Text Minign, Wikipedia
+	\item Information Retrieval, Wikipedia
+	\item Natural Language Processing, Wikipedia
+	\item Naive Bayes Algorithm, Wikipedia
+  \end{itemize}
+}
+\frame{\frametitle{References \([Contd.]\)}
+  \begin{itemize}
+	\item Support Vector Machine, Wikipedia
+	\item K Nearest Neighbors, Wikipedia
+	\item Expectation Maximization, Wikipedia
+	\item Numerical example to understand Expectation-Maximization, StackExchange.com\\
+  \end{itemize}
+
+  \vspace{20mm}
+  \fontsize{7}{10}\selectfont The report \(latex as well as pdf\) is available at \url{http://github.com/arshadansari27/me-sem3-report-latex.git}
+}
+
+\end{document}
+
+

@@ -1,0 +1,17 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.lof
+*.log
+*.lot
+*.run
+*.toc
+*.nav
+*.out
+*.run.xml
+*.snm
+.ropeproject/
+*.pyc
+resources/
+venv

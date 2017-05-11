@@ -1,0 +1,55 @@
+from sanscript import transliterate as _transliterate, HK, DEVANAGARI
+import main
+
+nsuffixes = {
+    1: ["ो", "े", "ू", "ु", "ी", "ि", "ा"],
+    2: ["कर", "ाओ", "िए", "ाई", "ाए", "ने", "नी", "ना", "ते", "ीं", "ती", "ता", "ाँ", "ां", "ों", "ें"],
+    3: ["ाकर", "ाइए", "ाईं", "ाया", "ेगी", "ेगा", "ोगी", "ोगे", "ाने", "ाना", "ाते", "ाती", "ाता", "तीं", "ाओं", "ाएं", "ुओं", "ुएं", "ुआं"],
+    4: ["ाएगी", "ाएगा", "ाओगी", "ाओगे", "एंगी", "ेंगी", "एंगे", "ेंगे", "ूंगी", "ूंगा", "ातीं", "नाओं", "नाएं", "ताओं", "ताएं", "ियाँ", "ियों", "ियां"],
+    5: ["ाएंगी", "ाएंगे", "ाऊंगी", "ाऊंगा", "ाइयाँ", "ाइयों", "ाइयां"],
+}
+
+suffixes = {}
+
+for k, v in nsuffixes.iteritems():
+        suffixes[k] = [u.decode('utf-8') for u in v]
+
+def hi_stem(word):
+    for L in 5, 4, 3, 2, 1:
+        if len(word) > L + 1:
+            for suf in suffixes[L]:
+                if word.endswith(suf):
+                    return word[:-L]
+    return word
+
+
+HINDI_DICTIONARY = set(
+    [u.strip() for u in open(
+        main.RESOURCE_FOLDER + '/hindi-word-list.txt'
+    ).readlines() if len(u.strip()) > 0]
+)
+WORD_PAIRS = {}
+for u in open(main.RESOURCE_FOLDER + '/Output/wordpairs.txt').readlines():
+    u = u.strip()
+    if len(u) is 0:
+        continue
+    i = u.index(':')
+    eng = u[:i].strip()
+    hin = u[i + 1:].strip()
+    WORD_PAIRS[eng] = hin
+
+
+def transliterate(word):
+    if word in WORD_PAIRS:
+        return WORD_PAIRS[word]
+    u = _transliterate(word, HK, DEVANAGARI)
+    u2 = hi_stem(u)
+    if u2 in HINDI_DICTIONARY:
+        return u
+    else:
+        return 'Unknown'
+
+
+if __name__ == '__main__':
+    T, w, c = transliterate('yeh')
+    print T, w, c
