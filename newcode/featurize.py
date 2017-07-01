@@ -175,13 +175,10 @@ def feature_generation(text, language):
     return features
 
 if __name__ == '__main__':
-    print 'Beginning script.....'
+    print ('Beginning script.....')
     texts = [
             'Yeh dil mange more. I would love this. Kya baat hai jaane man',
             'Bahot bakwas thi movie. I cannot bear it']
     for text in texts:
-        print '*' * 100
-        print text
         f = feature_generation(text, 'H')
-        for i in f:
-            print i
+

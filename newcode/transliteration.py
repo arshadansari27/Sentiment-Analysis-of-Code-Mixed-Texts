@@ -41,7 +41,7 @@ def transliterate_word(text, lang='H'):
 
     sound = soundex(text)
     attempt = list(dict_to_use.find({'sound': sound}))
-    neighbors = sorted([(i['word'], distance(unicode(text), i['transliteration'])) for i in attempt], key=lambda x: x[1])
+    neighbors = sorted([(i['word'], distance(text, i['transliteration'])) for i in attempt], key=lambda x: x[1])
     return [u[0] for u in neighbors if u[1] < 3]
 
 def get_by_key(text, lang):
@@ -80,10 +80,9 @@ if __name__ == '__main__':
     count = 0
     for _id, text, lang in texts:
         count += 1.
-        print '[*]', _id, "%.2f" % ((count / total) * 100)
         if db.csv_input_all_tested.find_one({'_id': _id}):
             continue
         for word in text.split(' '):
-            print word, ','.join(transliterate_word(word.decode("utf-8"), lang))
-        print '\n'
+            print(word, ','.join(transliterate_word(word.decode("utf-8"), lang)))
+        print('\n')
         db.csv_input_all_tested.insert({'_id': _id})

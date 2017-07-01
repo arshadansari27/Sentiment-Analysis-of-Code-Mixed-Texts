@@ -342,7 +342,7 @@ def transliterate(data, _from=None, _to=None, scheme_map=None, **kw):
 
 def _setup():
     """Add a variety of default schemes."""
-    s = unicode.split
+    s = str.split
 
     SCHEMES.update({
         BENGALI: Scheme({

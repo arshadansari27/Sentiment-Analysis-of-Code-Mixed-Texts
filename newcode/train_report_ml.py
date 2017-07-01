@@ -4,7 +4,7 @@ import time
 import os
 import codecs
 import nltk
-import simplejson as json
+import json
 import pymongo
 from multiprocessing import Pool
 import threading
@@ -14,9 +14,13 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn import svm
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report
-from featurize import feature_generation
 from sklearn.metrics import f1_score
-
+from pymongo import MongoClient
+from collections import defaultdict
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib
+import os
 
 db = pymongo.MongoClient().sentiment_analysis_db
 
@@ -47,6 +51,7 @@ def get_updated_features(lang):
         ## Featurize
         feature_obj = db.feature_list.find_one({'_id': obj['_id']})
         if not feature_obj:
+            from featurize import feature_generation
             features = feature_generation(_input, lang)
             db.feature_list.insert({'_id': obj['_id'], 'lang': lang, 'features': features})
         else:
@@ -55,7 +60,7 @@ def get_updated_features(lang):
         data.append((transform_features(features), _output))
         percent_completed = (count / total) * 100
         if last_printed != int(percent_completed) and int(percent_completed) % 10 is 0:
-            print "Completed loading.. %.2f%%" % (percent_completed)
+            print ("Completed loading.. %.2f%%" % (percent_completed))
             last_printed = int(percent_completed)
     return data
 
@@ -141,7 +146,7 @@ def train_test(lang='H'):
             random.shuffle(ndata)
             while len(set([u[1] for u in ndata])) < 3:
                 random.shuffle(ndata)
-                print set([u[1] for u in ndata])
+                print (set([u[1] for u in ndata]))
             train_data = []
             train_labels = []
             test_data = []
@@ -160,7 +165,7 @@ def train_test(lang='H'):
             overall_accuracy = max(max_accuracy, overall_accuracy, key=lambda u: u[0])
         display_accuracy = "%.2f%%" % (ranged_overall_accuracy[0] * 100)
         display_train_percent = "%.2f%%" % (((len(train_data) * 1.) / len(ndata)) * 100)
-        print "\tResults for NB with accuracy", display_accuracy, display_train_percent
+        print( "\tResults for NB with accuracy", display_accuracy, display_train_percent)
         db.results_percentwise.insert({
             'lang': lang,
             'train_percent': tp,
@@ -175,13 +180,117 @@ def train_test(lang='H'):
         'accuracy': overall_accuracy[0],
         'f1_score': overall_accuracy[1]
     })
-    print '[Training %.2f%%, Accuracy %.2f%%]' % ( tp, overall_accuracy[0] * 100)
+    print('[Training %.2f%%, Accuracy %.2f%%]' % ( tp, overall_accuracy[0] * 100))
     # _id = db_features.replace('ss_', '').replace('_db', '')
     # db.results_linear_svm.update_one({'_id': _id}, {'$set': {'result': result}}, upsert=True)
 
 
+def generate_reports(lang='H'):
+    if not os.path.exists("../reports"):
+        os.mkdir("../reports")
+
+    conn = MongoClient()
+    db = conn.sentiment_analysis_db
+
+    fields = [
+            ('lang', "%s"),
+            ('train_percent', "%d"),
+            ('total', "%d"),
+            ('max_accuracy', "%.2f"),
+            ('linear_svm', "%.2f"),
+            ('rbf_svm', "%.2f"),
+            ('nb', "%.2f")
+            ]
+
+    HNB = []
+    HRBFSVM = []
+    HLSVM = []
+    MNB = []
+    MRBFSVM = []
+    MLSVM = []
+    
+    
+    hindi_overall = db.results_overall.find_one({'lang': 'H'})
+    marathi_overall = db.results_overall.find_one({'lang': 'M'})
+    
+    with open('../reports/output.csv', 'w') as outfile:
+        outfile.write("Lang, Overall Accuracy, Overall F1 Score, Train Percent, Total, Max Accuracy, Max F1 Score, SVM (linear) Accuracy, SVM (linear) F1 Score, SVM (RBF) Accuracy, SVM (RBF) F1 Score, Naive Bayes Accuracy, Naive Bayes F1 Score\n")
+        for data in db.results_percentwise.find({}):
+            
+            overall = hindi_overall if 'H' in str(data['lang']) else marathi_overall
+            print (data['lang'], overall['accuracy'], 'H' in str(data['lang']))
+            d = [
+                    data['lang'],
+                    "%.2f" % overall['accuracy'],
+                    "%.2f" % overall['f1_score'],
+                    "%d" % data['train_percent'],
+                    "%d" % data['total'],
+                    "%.2f" % data['max_accuracy'][0],
+                    "%.2f" % data['max_accuracy'][1],
+                    "%.2f" % data['linear_svm'][0],
+                    "%.2f" % data['linear_svm'][1],
+                    "%.2f" % data['rbf_svm'][0],
+                    "%.2f" % data['rbf_svm'][1],
+                    "%.2f" % data['nb'][0],
+                    "%.2f" % data['nb'][1]
+                ]
+            outfile.write(','.join(d) + '\n')
+            if data['lang'] == 'H':
+                HNB.append((data['train_percent'], (data['max_accuracy'][0] * 100, data['nb'][0] * 100)))
+                HRBFSVM.append((data['train_percent'], (data['max_accuracy'][0] * 100, data['rbf_svm'][0] * 100)))
+                HLSVM.append((data['train_percent'], (data['max_accuracy'][0] * 100, data['linear_svm'][0] * 100)))
+            else:
+                MNB.append((data['train_percent'], (data['max_accuracy'][0] * 100, data['nb'][0] * 100)))
+                MRBFSVM.append((data['train_percent'], (data['max_accuracy'][0] * 100, data['rbf_svm'][0] * 100)))
+                MLSVM.append((data['train_percent'], (data['max_accuracy'][0] * 100, data['linear_svm'][0] * 100)))
+
+    HNB = sorted(HNB)
+    HRBFSVM = sorted(HRBFSVM)
+    HLSVM = sorted(HLSVM)
+    MNB = sorted(MNB)
+    MRBFSVM = sorted(MRBFSVM)
+    MLSVM = sorted(MLSVM)
+    
+    if lang == 'H':
+        charts = [
+            ("hindi-nb", "Naive Bayes", HNB),
+            ("hindi-lsvm", "Linear SVM", HLSVM),
+            ("hindi-svm", "RBF SVM", HRBFSVM)
+            ]
+    else:
+        charts = [
+            ("marathi-nb", "Naive Bayes", MNB),
+            ("marathi-lsvm", "Linear SVM", MLSVM),
+            ("marathi-svm", "RBF SVM", MRBFSVM)
+            ]
+    
+
+    # No Display
+    matplotlib.use('Agg')
+    
+    
+    for filename, algorithm, data in charts:
+        xaxis = np.array([u[0] for u in data])
+        yaxis_max_accuracy = np.array([u[1][0] for u in data])
+        yaxis_specific = np.array([u[1][1] for u in data])
+        
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        lns1 = ax.plot(xaxis, yaxis_max_accuracy, '-', label='Max Accuracy')
+        lns2 = ax.plot(xaxis, yaxis_specific, '-', label=algorithm)
+        ax.legend(loc=0)
+        ax.grid()
+        ax.set_xlabel("Training Data (%)")
+        ax.set_ylabel("Accuracy (%)")
+        ax.set_ylim(0, 100)
+        # plt.savefig("../reports/" + filename + ".png", format='png')
+        plt.show()
+        plt.clf()
+
 if __name__ == '__main__':
-    # print '[1] Machine learning report generation for Hindi Code Mix'
+    # print ('[1] Machine learning report generation for Hindi Code Mix')
     # train_test('H')
-    print '[2] Machine learning report generation for Marathi Code Mix'
-    train_test('M')
+    lang = 'H'
+    print ('[2] Machine learning report generation for %s Code Mix' % 'Hindi' if lang == 'H' else 'Marathi')
+    train_test(lang)
+    generate_reports(lang)
