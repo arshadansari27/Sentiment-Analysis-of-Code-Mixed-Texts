@@ -165,7 +165,7 @@ def train_test(lang='H'):
             overall_accuracy = max(max_accuracy, overall_accuracy, key=lambda u: u[0])
         display_accuracy = "%.2f%%" % (ranged_overall_accuracy[0] * 100)
         display_train_percent = "%.2f%%" % (((len(train_data) * 1.) / len(ndata)) * 100)
-        print( "\tResults for NB with accuracy", display_accuracy, display_train_percent)
+        print( "\tResults for NB, SVM (linear and RBF) with max accuracy", display_accuracy, display_train_percent)
         db.results_percentwise.insert({
             'lang': lang,
             'train_percent': tp,
@@ -283,14 +283,14 @@ def generate_reports(lang='H'):
         ax.set_xlabel("Training Data (%)")
         ax.set_ylabel("Accuracy (%)")
         ax.set_ylim(0, 100)
-        # plt.savefig("../reports/" + filename + ".png", format='png')
-        plt.show()
+        plt.savefig("../reports/" + filename + ".png", format='png')
+        #plt.show()
         plt.clf()
 
 if __name__ == '__main__':
     # print ('[1] Machine learning report generation for Hindi Code Mix')
     # train_test('H')
-    lang = 'H'
-    print ('[2] Machine learning report generation for %s Code Mix' % 'Hindi' if lang == 'H' else 'Marathi')
-    train_test(lang)
-    generate_reports(lang)
+    for lang in ['H', 'M']:
+        print ('[*] Machine learning report generation for %s Code Mix' % 'Hindi' if lang == 'H' else 'Marathi')
+        train_test(lang)
+        generate_reports(lang)
